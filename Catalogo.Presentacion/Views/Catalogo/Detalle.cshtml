@@ -5,7 +5,7 @@
 }
 
 <div class="page-wrap">
-    <a asp-action="Index" class="back-link">← Volver al catálogo</a>
+    <a href="/Catalogo/Index" class="back-link">← Volver al catálogo</a>
 
     <div class="detail-card">
         <div class="detail-header">
@@ -31,7 +31,9 @@
                 }
                 else
                 {
-                    <span style="color:var(--text-muted); font-size:.9rem">Sin calificaciones aún</span>
+                    <span style="color:var(--text-muted);font-size:.9rem">
+                        Sin calificaciones aún
+                    </span>
                 }
             </div>
         </div>
@@ -42,13 +44,12 @@
         }
 
         <div class="detail-actions">
-            <a asp-action="Eliminar" asp-route-id="@Model.Id" class="btn-action btn-delete">
+            <a href="/Catalogo/Eliminar/@Model.Id" class="btn-action btn-delete">
                 Eliminar juego
             </a>
         </div>
     </div>
 
-    <!-- RESEÑAS EXISTENTES -->
     <h2 class="section-title">Reseñas <span>(@Model.Resenas.Count)</span></h2>
 
     @if (Model.Resenas.Any())
@@ -77,10 +78,9 @@
         <p class="empty-hint">Sé el primero en dejar una reseña.</p>
     }
 
-    <!-- FORMULARIO NUEVA RESEÑA -->
     <div class="form-wrap" style="margin-top:2rem">
         <h2>Dejar una reseña</h2>
-        <form method="post" asp-action="AgregarResena" asp-route-id="@Model.Id">
+        <form method="post" action="/Catalogo/AgregarResena/@Model.Id">
             <label>Tu nombre (opcional)</label>
             <input type="text" name="autor" placeholder="Anónimo" />
 
@@ -94,7 +94,9 @@
             <input type="hidden" name="estrellas" id="starValue" value="5" />
 
             <label>Reseña</label>
-            <textarea name="texto" rows="4" placeholder="¿Qué te pareció el juego?" required></textarea>
+            <textarea name="texto" rows="4"
+                      placeholder="¿Qué te pareció el juego?"
+                      required></textarea>
 
             <button type="submit" class="form-submit">Publicar reseña</button>
         </form>
@@ -103,23 +105,23 @@
 
 @section Scripts {
     <script>
-        const stars = document.querySelectorAll('.pick-star');
-        const input = document.getElementById('starValue');
+        const stars  = document.querySelectorAll('.pick-star');
+        const input  = document.getElementById('starValue');
         let selected = 5;
 
-        function paintStars(n) {
+        function paint(n) {
             stars.forEach((s, i) => s.classList.toggle('on', i < n));
         }
 
-        paintStars(selected);
+        paint(selected);
 
         stars.forEach((s, i) => {
-            s.addEventListener('mouseover', () => paintStars(i + 1));
-            s.addEventListener('mouseout', () => paintStars(selected));
+            s.addEventListener('mouseover', () => paint(i + 1));
+            s.addEventListener('mouseout',  () => paint(selected));
             s.addEventListener('click', () => {
-                selected = i + 1;
+                selected    = i + 1;
                 input.value = selected;
-                paintStars(selected);
+                paint(selected);
             });
         });
     </script>

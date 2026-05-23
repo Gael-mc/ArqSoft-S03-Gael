@@ -5,7 +5,9 @@
     "Genero": "terror",
     "Consola": "PS3",
     "Ano": 2013,
-    "Descripcion": "una ni\u00F1a es la unica cura "
+    "Descripcion": "una ni\u00F1a es la unica cura ",
+    "Resenas": [],
+    "CalificacionPromedio": 0
   },
   {
     "Id": 2,
@@ -13,6 +15,25 @@
     "Genero": "Cartas ",
     "Consola": "Celulares ",
     "Ano": 2015,
-    "Descripcion": "juego de estrategia en tiempo real 1v1 o 2v2 "
+    "Descripcion": "juego de estrategia en tiempo real 1v1 o 2v2 ",
+    "Resenas": [
+      {
+        "Autor": "Gael",
+        "Texto": "buen juego ",
+        "Estrellas": 3,
+        "Fecha": "22/05/2026"
+      }
+    ],
+    "CalificacionPromedio": 3
+  },
+  {
+    "Id": 3,
+    "Titulo": "fortnite ",
+    "Genero": "battle Royale",
+    "Consola": "todas ",
+    "Ano": 2017,
+    "Descripcion": "juegom de 100 jugadores ",
+    "Resenas": [],
+    "CalificacionPromedio": 0
   }
 ]

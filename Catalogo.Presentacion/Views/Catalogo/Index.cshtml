@@ -8,14 +8,15 @@
 <div class="page-wrap">
     <div class="page-header">
         <h1 class="page-title">Catálogo de <span>Juegos</span></h1>
-        <a asp-action="Agregar" class="btn-add">+ Agregar juego</a>
+        <a href="/Catalogo/Agregar" class="btn-add">+ Agregar juego</a>
     </div>
 
     <div class="filters">
-        <a asp-action="Index" class="filter-chip @(generoActivo == null ? "active" : "")">Todos</a>
+        <a href="/Catalogo/Index"
+           class="filter-chip @(generoActivo == null ? "active" : "")">Todos</a>
         @foreach (var g in ViewBag.Generos as List<string> ?? new())
         {
-            <a asp-action="Index" asp-route-genero="@g"
+            <a href="/Catalogo/Index?genero=@g"
                class="filter-chip @(generoActivo == g ? "active" : "")">@g</a>
         }
     </div>
@@ -24,7 +25,7 @@
     {
         <div class="empty-state">
             <p>No hay juegos en el catálogo todavía.</p>
-            <a asp-action="Agregar" class="btn-add">+ Agregar el primero</a>
+            <a href="/Catalogo/Agregar" class="btn-add">+ Agregar el primero</a>
         </div>
     }
     else
@@ -33,14 +34,16 @@
             @foreach (var item in Model)
             {
                 <div class="game-card">
-                    <a asp-action="Detalle" asp-route-id="@item.Id" class="game-card-title">
+                    <a href="/Catalogo/Detalle/@item.Id" class="game-card-title">
                         @item.Titulo
                     </a>
+
                     <div class="game-meta">
                         <span class="badge-genre">@item.Genero</span>
                         <span class="badge-consola">@item.Consola</span>
                         <span class="badge-year">@item.Ano</span>
                     </div>
+
                     @if (item.Resenas.Any())
                     {
                         <div class="star-display">
@@ -48,16 +51,24 @@
                             {
                                 <span class="@(s <= Math.Round(item.CalificacionPromedio) ? "star on" : "star")">★</span>
                             }
-                            <span class="star-num">@item.CalificacionPromedio (@item.Resenas.Count reseñas)</span>
+                            <span class="star-num">
+                                @item.CalificacionPromedio (@item.Resenas.Count reseñas)
+                            </span>
                         </div>
                     }
+
                     @if (!string.IsNullOrWhiteSpace(item.Descripcion))
                     {
                         <p class="game-desc">@item.Descripcion</p>
                     }
+
                     <div class="game-actions">
-                        <a asp-action="Detalle" asp-route-id="@item.Id" class="btn-action btn-detail">Ver detalle</a>
-                        <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn-action btn-delete">Eliminar</a>
+                        <a href="/Catalogo/Detalle/@item.Id" class="btn-action btn-detail">
+                            Ver detalle
+                        </a>
+                        <a href="/Catalogo/Eliminar/@item.Id" class="btn-action btn-delete">
+                            Eliminar
+                        </a>
                     </div>
                 </div>
             }
