@@ -1,14 +1,126 @@
-﻿@model Item
+﻿@using CatalogoApp.Domain.Models
+@model Item
 @{
     ViewData["Title"] = Model.Titulo;
 }
 
-<h1>@Model.Titulo</h1>
+<div class="page-wrap">
+    <a asp-action="Index" class="back-link">← Volver al catálogo</a>
 
-<p><strong>Género:</strong> @Model.Genero</p>
-<p><strong>Consola:</strong> @Model.Consola</p>
-<p><strong>Año:</strong> @Model.Ano</p>
-<p><strong>Descripción:</strong> @Model.Descripcion</p>
+    <div class="detail-card">
+        <div class="detail-header">
+            <div>
+                <h1 class="detail-title">@Model.Titulo</h1>
+                <div class="game-meta" style="margin-top:.6rem">
+                    <span class="badge-genre">@Model.Genero</span>
+                    <span class="badge-consola">@Model.Consola</span>
+                    <span class="badge-year">@Model.Ano</span>
+                </div>
+            </div>
+            <div class="detail-rating">
+                @if (Model.Resenas.Any())
+                {
+                    <div class="big-stars">
+                        @for (int s = 1; s <= 5; s++)
+                        {
+                            <span class="@(s <= Math.Round(Model.CalificacionPromedio) ? "star on" : "star")">★</span>
+                        }
+                    </div>
+                    <span class="rating-num">@Model.CalificacionPromedio / 5</span>
+                    <span class="rating-count">@Model.Resenas.Count reseña(s)</span>
+                }
+                else
+                {
+                    <span style="color:var(--text-muted); font-size:.9rem">Sin calificaciones aún</span>
+                }
+            </div>
+        </div>
 
-<hr />
-<a asp-action="Index">&larr; Volver al catálogo</a>
+        @if (!string.IsNullOrWhiteSpace(Model.Descripcion))
+        {
+            <p class="detail-desc">@Model.Descripcion</p>
+        }
+
+        <div class="detail-actions">
+            <a asp-action="Eliminar" asp-route-id="@Model.Id" class="btn-action btn-delete">
+                Eliminar juego
+            </a>
+        </div>
+    </div>
+
+    <!-- RESEÑAS EXISTENTES -->
+    <h2 class="section-title">Reseñas <span>(@Model.Resenas.Count)</span></h2>
+
+    @if (Model.Resenas.Any())
+    {
+        <div class="resenas-list">
+            @foreach (var r in Model.Resenas.AsEnumerable().Reverse())
+            {
+                <div class="resena-card">
+                    <div class="resena-header">
+                        <span class="resena-autor">@r.Autor</span>
+                        <div class="star-display">
+                            @for (int s = 1; s <= 5; s++)
+                            {
+                                <span class="@(s <= r.Estrellas ? "star on" : "star")">★</span>
+                            }
+                        </div>
+                        <span class="resena-fecha">@r.Fecha</span>
+                    </div>
+                    <p class="resena-texto">@r.Texto</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="empty-hint">Sé el primero en dejar una reseña.</p>
+    }
+
+    <!-- FORMULARIO NUEVA RESEÑA -->
+    <div class="form-wrap" style="margin-top:2rem">
+        <h2>Dejar una reseña</h2>
+        <form method="post" asp-action="AgregarResena" asp-route-id="@Model.Id">
+            <label>Tu nombre (opcional)</label>
+            <input type="text" name="autor" placeholder="Anónimo" />
+
+            <label>Calificación</label>
+            <div class="star-picker" id="starPicker">
+                @for (int s = 1; s <= 5; s++)
+                {
+                    <span class="pick-star" data-val="@s">★</span>
+                }
+            </div>
+            <input type="hidden" name="estrellas" id="starValue" value="5" />
+
+            <label>Reseña</label>
+            <textarea name="texto" rows="4" placeholder="¿Qué te pareció el juego?" required></textarea>
+
+            <button type="submit" class="form-submit">Publicar reseña</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const stars = document.querySelectorAll('.pick-star');
+        const input = document.getElementById('starValue');
+        let selected = 5;
+
+        function paintStars(n) {
+            stars.forEach((s, i) => s.classList.toggle('on', i < n));
+        }
+
+        paintStars(selected);
+
+        stars.forEach((s, i) => {
+            s.addEventListener('mouseover', () => paintStars(i + 1));
+            s.addEventListener('mouseout', () => paintStars(selected));
+            s.addEventListener('click', () => {
+                selected = i + 1;
+                input.value = selected;
+                paintStars(selected);
+            });
+        });
+    </script>
+}

@@ -4,9 +4,10 @@ namespace CatalogoApp.Domain.Interfaces
 {
     public interface IItemRepository
     {
-        List<Item> ObtenerTodos();
-        Item? ObtenerPorId(int id);
-        void Agregar(Item item);
-        void Eliminar(int id);
+        List<Item> GetAll();
+        Item? GetById(int id);
+        void Add(Item item);
+        void Update(Item item);
+        void Delete(int id);
     }
 }

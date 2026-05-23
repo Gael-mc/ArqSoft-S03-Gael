@@ -1,7 +1,4 @@
-﻿#nullable enable
-using System.Collections.Generic;
-using System.Linq;
-using CatalogoApp.Domain.Interfaces;
+﻿using CatalogoApp.Domain.Interfaces;
 using CatalogoApp.Domain.Models;
 
 namespace CatalogoApp.Application.Services
@@ -9,50 +6,32 @@ namespace CatalogoApp.Application.Services
     public class ItemService
     {
         private readonly IItemRepository _repo;
+        public ItemService(IItemRepository repo) => _repo = repo;
 
-        // El servicio recibe el repositorio por constructor
-        // No sabe si es JSON, SQL, memoria, etc.
-        public ItemService(IItemRepository repo)
+        public List<Item> GetAll() => _repo.GetAll();
+
+        public List<Item> GetByGenero(string genero) =>
+            _repo.GetAll().Where(i =>
+                i.Genero.Equals(genero, StringComparison.OrdinalIgnoreCase)).ToList();
+
+        public Item? GetById(int id) => _repo.GetById(id);
+
+        public void Add(Item item) => _repo.Add(item);
+
+        public void Delete(int id) => _repo.Delete(id);
+
+        public void AgregarResena(int id, Resena resena)
         {
-            _repo = repo;
+            var item = _repo.GetById(id);
+            if (item == null) return;
+            resena.Fecha = DateTime.Now.ToString("dd/MM/yyyy");
+            item.Resenas.Add(resena);
+            _repo.Update(item);
         }
 
-        public List<Item> ObtenerTodos()
-        {
-            return _repo.ObtenerTodos();
-        }
-
-        public Item? ObtenerPorId(int id)
-        {
-            return _repo.ObtenerPorId(id);
-        }
-
-        public void Agregar(Item item)
-        {
-            // Aquí podrías agregar validaciones de negocio
-            // Por ejemplo: if (string.IsNullOrEmpty(item.Titulo)) throw...
-            _repo.Agregar(item);
-        }
-
-        public void Eliminar(int id)
-        {
-            _repo.Eliminar(id);
-        }
-
-        // Método útil para el filtro por categoría/género
-        public List<Item> ObtenerPorGenero(string genero)
-        {
-            return _repo.ObtenerTodos()
-                        .Where(i => i.Genero == genero)
-                        .ToList();
-        }
-
-        public List<string> ObtenerGeneros()
-        {
-            return _repo.ObtenerTodos()
-                        .Select(i => i.Genero)
-                        .Distinct()
-                        .ToList();
-        }
+        public List<string> GetGeneros() =>
+            _repo.GetAll().Select(i => i.Genero)
+                 .Distinct(StringComparer.OrdinalIgnoreCase)
+                 .OrderBy(g => g).ToList();
     }
 }

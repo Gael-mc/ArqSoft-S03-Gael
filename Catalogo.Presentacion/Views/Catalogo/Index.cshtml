@@ -1,30 +1,66 @@
-﻿@model List<Item>
+﻿@using CatalogoApp.Domain.Models
+@model List<Item>
 @{
-    ViewData["Title"] = "Catálogo de Videojuegos";
+    ViewData["Title"] = "Catálogo";
+    var generoActivo = ViewBag.GeneroActivo as string;
 }
 
-<h1>Catálogo de Videojuegos</h1>
+<div class="page-wrap">
+    <div class="page-header">
+        <h1 class="page-title">Catálogo de <span>Juegos</span></h1>
+        <a asp-action="Agregar" class="btn-add">+ Agregar juego</a>
+    </div>
 
-<div>
-    <a asp-action="Index">Todos</a>
-    @foreach (var gen in ViewBag.Generos as List<string> ?? new List<string>())
+    <div class="filters">
+        <a asp-action="Index" class="filter-chip @(generoActivo == null ? "active" : "")">Todos</a>
+        @foreach (var g in ViewBag.Generos as List<string> ?? new())
+        {
+            <a asp-action="Index" asp-route-genero="@g"
+               class="filter-chip @(generoActivo == g ? "active" : "")">@g</a>
+        }
+    </div>
+
+    @if (!Model.Any())
     {
-        <span> | </span>
-        <a asp-action="Index" asp-route-genero="@gen">@gen</a>
+        <div class="empty-state">
+            <p>No hay juegos en el catálogo todavía.</p>
+            <a asp-action="Agregar" class="btn-add">+ Agregar el primero</a>
+        </div>
+    }
+    else
+    {
+        <div class="games-grid">
+            @foreach (var item in Model)
+            {
+                <div class="game-card">
+                    <a asp-action="Detalle" asp-route-id="@item.Id" class="game-card-title">
+                        @item.Titulo
+                    </a>
+                    <div class="game-meta">
+                        <span class="badge-genre">@item.Genero</span>
+                        <span class="badge-consola">@item.Consola</span>
+                        <span class="badge-year">@item.Ano</span>
+                    </div>
+                    @if (item.Resenas.Any())
+                    {
+                        <div class="star-display">
+                            @for (int s = 1; s <= 5; s++)
+                            {
+                                <span class="@(s <= Math.Round(item.CalificacionPromedio) ? "star on" : "star")">★</span>
+                            }
+                            <span class="star-num">@item.CalificacionPromedio (@item.Resenas.Count reseñas)</span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.Descripcion))
+                    {
+                        <p class="game-desc">@item.Descripcion</p>
+                    }
+                    <div class="game-actions">
+                        <a asp-action="Detalle" asp-route-id="@item.Id" class="btn-action btn-detail">Ver detalle</a>
+                        <a asp-action="Eliminar" asp-route-id="@item.Id" class="btn-action btn-delete">Eliminar</a>
+                    </div>
+                </div>
+            }
+        </div>
     }
 </div>
-
-<hr />
-
-<ul>
-    @foreach (var item in Model)
-    {
-        <li>
-            <a asp-action="Detalle" asp-route-id="@item.Id">@item.Titulo</a>
-            &mdash; @item.Genero &diams; @item.Ano
-        </li>
-    }
-</ul>
-
-<hr />
-<a asp-action="Agregar">+ Agregar videojuego</a>

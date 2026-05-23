@@ -1,8 +1,87 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using CatalogoApp.Domain.Models
+@{
+    ViewData["Title"] = "Inicio";
+    int total = ViewBag.TotalJuegos ?? 0;
+    int generos = ViewBag.TotalGeneros ?? 0;
+    var ultimos = ViewBag.UltimosJuegos as List<Item> ?? new();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-wrap">
+    <div class="hero-inner">
+        <span class="hero-badge">◆ Tu colección personal</span>
+
+        <h1 class="hero-title">
+            Tu biblioteca<br />de <span class="hl">videojuegos</span>
+        </h1>
+
+        <p class="hero-sub">
+            Registra, organiza y explora tu catálogo de videojuegos.
+            Agrega reseñas, calificaciones y filtra por género o consola.
+        </p>
+
+        <div class="hero-btns">
+            <a asp-controller="Catalogo" asp-action="Index" class="btn-cta btn-cta-primary">
+                Ver catálogo
+            </a>
+            <a asp-controller="Catalogo" asp-action="Agregar" class="btn-cta btn-cta-outline">
+                + Agregar juego
+            </a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-num">@total</span>
+                <span class="stat-label">Juegos registrados</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">@generos</span>
+                <span class="stat-label">Géneros distintos</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">JSON</span>
+                <span class="stat-label">Almacenamiento local</span>
+            </div>
+        </div>
+    </div>
 </div>
+
+@if (ultimos.Any())
+{
+    <div class="page-wrap" style="padding-top:0">
+        <h2 class="page-title" style="margin-bottom:1.5rem; font-size:1.6rem;">
+            Últimos <span>agregados</span>
+        </h2>
+        <div class="games-grid">
+            @foreach (var item in ultimos)
+            {
+                <div class="game-card">
+                    <a asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@item.Id"
+                       class="game-card-title">@item.Titulo</a>
+                    <div class="game-meta">
+                        <span class="badge-genre">@item.Genero</span>
+                        <span class="badge-consola">@item.Consola</span>
+                        <span class="badge-year">@item.Ano</span>
+                    </div>
+                    @if (item.Resenas.Any())
+                    {
+                        <div class="star-display">
+                            @for (int s = 1; s <= 5; s++)
+                            {
+                                <span class="@(s <= item.CalificacionPromedio ? "star on" : "star")">★</span>
+                            }
+                            <span class="star-num">@item.CalificacionPromedio (@item.Resenas.Count)</span>
+                        </div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(item.Descripcion))
+                    {
+                        <p class="game-desc">@item.Descripcion</p>
+                    }
+                    <div class="game-actions">
+                        <a asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@item.Id"
+                           class="btn-action btn-detail">Ver detalle</a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

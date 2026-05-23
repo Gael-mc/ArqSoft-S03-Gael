@@ -1,0 +1,32 @@
+﻿@using CatalogoApp.Domain.Models
+@model Item
+@{
+    ViewData["Title"] = "Eliminar juego";
+}
+
+<div class="page-wrap" style="max-width:560px; margin:0 auto">
+    <div class="detail-card" style="border-color: rgba(255,75,110,0.3)">
+        <h1 class="detail-title" style="color:var(--danger)">¿Eliminar juego?</h1>
+        <p style="color:var(--text-muted); margin:1rem 0">
+            Estás a punto de eliminar <strong style="color:var(--text)">@Model.Titulo</strong>.
+            Esta acción no se puede deshacer.
+        </p>
+        <div class="game-meta">
+            <span class="badge-genre">@Model.Genero</span>
+            <span class="badge-consola">@Model.Consola</span>
+            <span class="badge-year">@Model.Ano</span>
+        </div>
+        <div class="detail-actions" style="margin-top:1.5rem">
+            <form method="post" asp-action="Eliminar" asp-route-id="@Model.Id">
+                <button type="submit" class="btn-action btn-delete"
+                        style="padding:.7rem 1.5rem; font-size:.9rem">
+                    Sí, eliminar
+                </button>
+            </form>
+            <a asp-action="Index" class="btn-action btn-detail"
+               style="padding:.7rem 1.5rem; font-size:.9rem">
+                Cancelar
+            </a>
+        </div>
+    </div>
+</div>
