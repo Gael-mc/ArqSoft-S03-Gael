@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Crear cuenta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">GAME<span>◆</span>VAULT</div>
+        <h1 class="auth-title">Crear cuenta</h1>
+        <p class="auth-sub">Únete y empieza a registrar tus videojuegos</p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="auth-error">⚠ @ViewBag.Error</div>
+        }
+
+        <form method="post" action="/Account/Registro">
+
+            <label>Nombre de usuario</label>
+            <input type="text" name="nombreUsuario" placeholder="GamerTag"
+                   required autocomplete="username" />
+
+            <label>Correo electrónico</label>
+            <input type="email" name="email" placeholder="tu@correo.com"
+                   required autocomplete="email" />
+
+            <label>Contraseña <span style="color:var(--text-muted);font-size:.75rem">(mínimo 6 caracteres)</span></label>
+            <input type="password" name="password" placeholder="••••••••"
+                   required autocomplete="new-password" minlength="6" />
+
+            <label>Confirmar contraseña</label>
+            <input type="password" name="confirmar" placeholder="••••••••"
+                   required autocomplete="new-password" minlength="6" />
+
+            <button type="submit" class="form-submit">Crear cuenta</button>
+        </form>
+
+        <p class="auth-switch">
+            ¿Ya tienes cuenta?
+            <a href="/Account/Login">Inicia sesión</a>
+        </p>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Iniciar sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-wrap">
+    <div class="auth-card">
+        <div class="auth-logo">GAME<span>◆</span>VAULT</div>
+        <h1 class="auth-title">Bienvenido de nuevo</h1>
+        <p class="auth-sub">Inicia sesión para acceder a tu catálogo</p>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="auth-error">⚠ @ViewBag.Error</div>
+        }
+
+        <form method="post" action="/Account/Login">
+            @if (ViewBag.ReturnUrl != null)
+            {
+                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            }
+
+            <label>Correo electrónico</label>
+            <input type="email" name="email" placeholder="tu@correo.com"
+                   required autocomplete="email" />
+
+            <label>Contraseña</label>
+            <input type="password" name="password" placeholder="••••••••"
+                   required autocomplete="current-password" />
+
+            <button type="submit" class="form-submit">Iniciar sesión</button>
+        </form>
+
+        <p class="auth-switch">
+            ¿No tienes cuenta?
+            <a href="/Account/Registro">Regístrate aquí</a>
+        </p>
+    </div>
+</div>

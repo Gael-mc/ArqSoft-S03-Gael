@@ -6,8 +6,15 @@
     "Consola": "PS3",
     "Ano": 2013,
     "Descripcion": "una ni\u00F1a es la unica cura ",
-    "Resenas": [],
-    "CalificacionPromedio": 0
+    "Resenas": [
+      {
+        "Autor": "pepe",
+        "Texto": "exelente ",
+        "Estrellas": 5,
+        "Fecha": "22/05/2026"
+      }
+    ],
+    "CalificacionPromedio": 5
   },
   {
     "Id": 2,
@@ -35,5 +42,39 @@
     "Descripcion": "juegom de 100 jugadores ",
     "Resenas": [],
     "CalificacionPromedio": 0
+  },
+  {
+    "Id": 4,
+    "Titulo": "brawl starts",
+    "Genero": "shooter",
+    "Consola": "MOBA",
+    "Ano": 2018,
+    "Descripcion": "juego 4v4 p 1v1 ",
+    "Resenas": [
+      {
+        "Autor": "space",
+        "Texto": "increible",
+        "Estrellas": 4,
+        "Fecha": "22/05/2026"
+      }
+    ],
+    "CalificacionPromedio": 4
+  },
+  {
+    "Id": 5,
+    "Titulo": "mario bros",
+    "Genero": "plataforma",
+    "Consola": "Nintendo ",
+    "Ano": 1900,
+    "Descripcion": "fontanero mata tortugas mutantes ",
+    "Resenas": [
+      {
+        "Autor": "zoe",
+        "Texto": "increible ",
+        "Estrellas": 5,
+        "Fecha": "22/05/2026"
+      }
+    ],
+    "CalificacionPromedio": 5
   }
 ]
